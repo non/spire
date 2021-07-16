@@ -59,13 +59,13 @@ Concerns or issues can be sent to any of Spire's maintainers, or to the
 
 ### Set up
 
-Spire is currently available for Scala 2.10, 2.11, and 2.12, for the
+Spire is currently available for Scala 2.10, 2.11, 2.12 and 2.13, for the
 JVM and JS platforms.
 
 To get started with SBT, simply add the following to your `build.sbt` file:
 
 ```
-libraryDependencies += "org.typelevel" %% "spire" % "0.14.1"
+libraryDependencies += "org.typelevel" %% "spire" % "0.17.0"
 ```
 
 (Previous to 0.14.0, Spire was published under *org.spire-math*
