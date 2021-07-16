@@ -186,7 +186,7 @@ Detailed treatment of these type classes can be found in the
 Spire contains a lot of types, as well as other machinery to provide a nice
 user experience. The easiest way to use spire is via wildcard imports:
 
-```tut
+```scala mdoc:silent
 import spire.algebra._   // provides algebraic type classes
 import spire.math._      // provides functions, types, and type classes
 import spire.implicits._ // provides infix operators, instances and conversions
@@ -358,33 +358,39 @@ encounter will occur at compile-time.
 
 For example:
 
-```tut
-import spire.syntax.literals._
+```scala mdoc:silent
+object LiteralsDemo {
+  import spire.syntax.literals._
+  
+  // bytes and shorts
+  val x = b"100" // without type annotation!
+  val y = h"999"
+  val mask = b"255" // unsigned constant converted to signed (-1)
+  
+  // rationals
+  val n1 = r"1/3"
+  val n2 = r"1599/115866" // simplified at compile-time to 13/942
+}
 
-// bytes and shorts
-val x = b"100" // without type annotation!
-val y = h"999"
-val mask = b"255" // unsigned constant converted to signed (-1)
+object RadixDemo {
+  // support different radix literals
+  import spire.syntax.literals.radix._
+  
+  // representations of the number 23
+  val a = x2"10111" // binary
+  val b = x8"27" // octal
+  val c = x16"17" // hex
+}
 
-// rationals
-val n1 = r"1/3"
-val n2 = r"1599/115866" // simplified at compile-time to 13/942
-
-// support different radix literals
-import spire.syntax.literals.radix._
-
-// representations of the number 23
-val a = x2"10111" // binary
-val b = x8"27" // octal
-val c = x16"17" // hex
-
-// SI notation for large numbers
-import spire.syntax.literals.si._ // .us and .eu also available
-
-val w = i"1 944 234 123" // Int
-val x = j"89 234 614 123 234 772" // Long
-val y = big"123 234 435 456 567 678 234 123 112 234 345" // BigInt
-val z = dec"1 234 456 789.123456789098765" // BigDecimal
+object SIDemo {
+  // SI notation for large numbers
+  import spire.syntax.literals.si._ // .us and .eu also available
+  
+  val w = i"1 944 234 123" // Int
+  val x = j"89 234 614 123 234 772" // Long
+  val y = big"123 234 435 456 567 678 234 123 112 234 345" // BigInt
+  val z = dec"1 234 456 789.123456789098765" // BigDecimal
+}
 ```
 
 Spire also provides a loop macro called `cfor` whose syntax bears a slight
@@ -394,7 +400,7 @@ tail-recursive function, which will inline literal function arguments.
 The macro can be nested in itself and compares favorably with other looping
 constructs in Scala such as `for` and `while`:
 
-```tut
+```scala mdoc:silent
 
 // print numbers 1 through 10
 cfor(0)(_ < 10, _ + 1) { i =>
@@ -402,7 +408,7 @@ cfor(0)(_ < 10, _ + 1) { i =>
 }
 
 // naive sorting algorithm
-def selectionSort(ns: Array[Int]) {
+def selectionSort(ns: Array[Int]) = {
   val limit = ns.length -1
   cfor(0)(_ < limit, _ + 1) { i =>
     var k = i
@@ -473,20 +479,22 @@ the `spire.random.Dist[A]` type class. These instances represent a
 strategy for getting random values using a `Generator` instance. For
 instance:
 
-```tut
-import spire.random.Dist
+```scala mdoc:silent
+object DistDemo {
+  import spire.random.Dist
+  
+  val rng = spire.random.rng.Cmwc5()
+  
+  // produces a map with ~10-20 entries
+  implicit val nextmap = Dist.map[Int, Complex[Double]](10, 20)
+  val m = rng.next[Map[Int, Complex[Double]]]
 
-val rng = spire.random.rng.Cmwc5()
-
-// produces a double in [0.0, 1.0)
-val n = rng.next[Double]
-
-// produces a complex number, with real and imaginary parts in [0.0, 1.0)
-val c = rng.next[Complex[Double]]
-
-// produces a map with ~10-20 entries
-implicit val nextmap = Dist.map[Int, Complex[Double]](10, 20)
-val m = rng.next[Map[Int, Complex[Double]]]
+  // produces a double in [0.0, 1.0)
+  val n = rng.next[Double]
+  
+  // produces a complex number, with real and imaginary parts in [0.0, 1.0)
+  val q = rng.next[Complex[Double]]
+}
 ```
 
 Unlike generators, `Dist[A]` instances are immutable and composable,

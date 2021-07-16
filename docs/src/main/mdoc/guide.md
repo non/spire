@@ -19,7 +19,7 @@ operations.
 
 These code examples all assume the following imports:
 
-```tut
+```scala mdoc:silent:nest
 import spire.algebra._   // all type class definitions
 import spire.implicits._ // all type class instances and syntax
 ```
@@ -39,7 +39,7 @@ in the case of `plus`, it corresponds with `+`. When using these type
 classes, users have the option of using the symbolic syntax on the
 values directly or calling the method on the type class instance:
 
-```tut
+```scala mdoc:silent
 def usingSymbols[A: Ring](x: A, y: A): A = x + y
 def usingNames[A](x: A, y: A)(implicit r: Ring[A]): A = r.plus(x, y)
 ```
@@ -47,7 +47,7 @@ def usingNames[A](x: A, y: A)(implicit r: Ring[A]): A = r.plus(x, y)
 Some methods (e.g. `sqrt`) do not have corresponding symbols. In those
 cases, the method name itself can be used with the values:
 
-```tut
+```scala mdoc:silent
 def sqrt[A: NRoot](x: A): A = x.sqrt
 ```
 
@@ -88,12 +88,12 @@ and for when you're sure there won't be a conflict.
 Most of the time, you'll be using type classes as context bounds. For
 instance:
 
-```tut
-import spire.algebra._
-import spire.std.any._
-import spire.syntax.ring._
-
+```scala mdoc
 object Demo {
+  import spire.algebra._
+  import spire.std.any._
+  import spire.syntax.ring._
+
   def double[A: Ring](x: A): A = x + x
   def triple[A: Ring](x: A): A = x * 3
   println((double(3), triple(4)))
@@ -102,8 +102,8 @@ object Demo {
 
 This code ends up being equivalent to:
 
-```tut
-object Demo {
+```scala mdoc
+object Demo2 {
   def double[A](x: A)(implicit ev: Ring[A]): A = ev.plus(x, x)
   def triple[A](x: A)(implicit ev: Ring[A]): A = ev.times(x, ev.fromInt(3))
   println((double(3)(IntAlgebra), triple(4)(IntAlgebra)))
@@ -127,14 +127,14 @@ to use specialization. The good news is that most of Spire's code is
 already specialized (and tested for proper performance). The bad news
 is that you'll have to annotate all your generic code like so:
 
-```tut
-import spire.algebra._
-import spire.std.any._
-import spire.syntax.ring._
+```scala mdoc
+object Demo3 {
+  import spire.algebra._
+  import spire.std.any._
+  import spire.syntax.ring._
+  
+  import scala.{specialized => sp}
 
-import scala.{specialized => sp}
-
-object Demo {
   def double[@sp A: Ring](x: A): A = x + x
   def triple[@sp A: Ring](x: A): A = x * 3
   println((double(3), triple(4)))
@@ -610,7 +610,7 @@ Writing literal unsigned values is slightly more cumbersome than their
 signed counterparts (consider `UInt(7)` versus `7`). Spire provides
 syntax imports which make these slightly easier to write:
 
-```tut
+```scala mdoc:nest
 import spire.syntax.literals._
 
 ui"7" // equivalent to UInt(7)
@@ -711,8 +711,9 @@ importing `spire.syntax.literals._` (or just `spire.implicits._`) you
 can use the `poly` string interpolator to create
 `Polynomial[Rational]` instances:
 
-```tut
+```scala mdoc:nest
 import spire.syntax.literals._
+
 poly"3x^2 - 5x + 1"
 poly"5/4x^6 - 7x - 2"
 poly"1.2x^3 - 6.1x^2 + 9x - 3.33"
@@ -777,14 +778,13 @@ obey the relevant algebraic identities. But unlike `Rational`, `Real`
 supports roots and trigonometric functions. Furthermore, important
 trig identities are also preserved:
 
-```tut
-import spire.implicits._
+```scala mdoc:silent
 import spire.math.Real
 
 import Real.{sin, cos}
 
 // will return Real(1) no matter what value is provided
-def circle(a: Real): Real = (cos(a).pow(2) + sin(a).pow(2)).sqrt
+def circle(a: Real): Real = (cos(a).pow(2) + sin(a).pow(2)).sqrt()
 ```
 
 One interesting consequence of the design of computable real numbers
