@@ -67,7 +67,7 @@ snippets to the issue if that's easier.
 For adding new code to Spire, it's often smart to create a topic
 branch that can be used to collaborate on the design. Features that
 require a lot of code, or which represent a big change to Spire, tend
-not to get merged to master as quickly. For this kind of work, you
+not to get merged to main as quickly. For this kind of work, you
 should submit a pull request from your branch, but we will probably
 leave the PR open for awhile while commenting on it.
 
