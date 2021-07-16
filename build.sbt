@@ -1,8 +1,8 @@
 import scala.language.existentials
-import sbt.io.Using
 import microsites._
 import ReleaseTransformations._
-import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossType
+import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 lazy val scalaCheckVersion = "1.15.4"
 
